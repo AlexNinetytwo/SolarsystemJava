@@ -14,12 +14,12 @@ public class Planet extends Entity{
 	private int aniY = 0;
 	private float angle = 0;
 	
-	public Planet(BufferedImage img, int tilesX, int tilesY, int size, int aniSpeed, float x, float y, double scale) {
+	public Planet(BufferedImage img, int tilesX, int tilesY, int size, int aniSpeed, float x, float y, float scale) {
 		super(img,tilesX,tilesY,size,aniSpeed,x,y,scale);
 		loadAnimation(img);
 	}
 	
-	public void rotate(Planet center, boolean clockwise, double speed, double radius) {
+	public void revolveAround(Planet center, boolean clockwise, float speed, float radius) {
 		if (clockwise) {
 			this.x = (float) (radius * Math.cos(angle) + center.x);
 			this.y = (float) (radius * Math.sin(angle) + center.y);
