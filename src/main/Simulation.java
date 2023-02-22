@@ -1,4 +1,5 @@
 package main;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 //import java.util.Random;
@@ -15,11 +16,8 @@ public class Simulation implements Runnable{
 	private Thread simThread;
 	private final int FPS_SET = 60;
 	private final int UPS_SET = 90;
-	private Planet sun;
-	private Planet earth;
-//	private Planet moon;
 	private Planet[] planets;
-	private final byte planetsAmount = 2;
+	private final byte planetsAmount = 4;
 	private BufferedImage background = LoadSave.GetSpriteAtlas("background.png");
 	
 	public static final int SIM_WIDTH = 1000;
@@ -41,14 +39,27 @@ public class Simulation implements Runnable{
 	private void initClasses() {
 		
 		creatPlanets();
+		creatCircles();
 	}
 	
 	private void creatPlanets() {
 		
 		planets = new Planet[planetsAmount];
-		planets[0] = sun = new Planet(loadImage("sun.png"),5, 7, 128, 2, 500, 500, 1);
-		planets[1] = earth = new Planet(loadImage("earth.png"),11, 2, 120, 2, 500, 500, 0.5F);
-//		planets[2] = moon = new Planet(loadImage("sun.png"),5, 7, 128, 20, 500, 500, 0.1);
+		
+		//BufferedImage img, int tilesX, int tilesY, int size, int aniSpeed, float x, float y, float scale
+		Planet sun = new Planet(loadImage("sun.png"),5, 7, 128, 2, 500, 500, 1),
+			 earth = new Planet(loadImage("earth.png"),11, 2, 120, 2, 500, 500, 0.5F),
+		   mercury = new Planet(loadImage("mercury.png"),1, 43, 100, 2, 500, 500, 0.25F),
+			  moon = new Planet(loadImage("sun.png"),5, 7, 128, 20, 500, 500, 0.1F);
+		
+		planets[0] = sun;
+		planets[1] = earth;
+		planets[2] = mercury;
+		planets[3] = moon;
+	}
+	
+	private void creatCircles() {
+		planets[1].createCircle(250, Color.blue);
 	}
 	
 	private BufferedImage loadImage(String fileName) {
@@ -68,8 +79,9 @@ public class Simulation implements Runnable{
 	
 	public void update() {
 		
-		earth.revolveAround(sun, false, 2, 250);
-//		moon.rotate(earth, false, 4, 50);
+		planets[1].revolveAround(planets[0], false, 2, 250);
+		planets[2].revolveAround(planets[0], false, 4, 150);
+		planets[3].revolveAround(planets[1], false, 30, 50);
 		for (int i = 0; i < planets.length; i++) {
 			planets[i].update();
 		}
@@ -78,10 +90,11 @@ public class Simulation implements Runnable{
 	public void render(Graphics g) {
 		
 		renderBackground(g);
-		renderCircle(g);
-		for (int i = 0; i < planets.length; i++)
+		planets[1].circle.render(g);
+		for (int i = 0; i < planets.length; i++) {
+			
 			planets[i].render(g);
-		
+		}	
 	}
 	
 	private void renderBackground(Graphics g) {
@@ -89,10 +102,7 @@ public class Simulation implements Runnable{
 		g.drawImage(background, 0, 0, null);
 	}
 	
-	private void renderCircle(Graphics g) {
-		
-		simPanel.paint(g,250,250,500,500);
-	}
+
 	
 	
 	
