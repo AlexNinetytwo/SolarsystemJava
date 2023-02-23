@@ -14,7 +14,8 @@ public class Planet extends Entity{
 	private int aniX = 0;
 	private int aniY = 0;
 	private float angle = 0;
-	public Circle circle;
+	private Circle circle;
+	private boolean circleCreated = false;
 
 	
 	public Planet(BufferedImage img, int tilesX, int tilesY, int size, int aniSpeed, float x, float y, float scale) {
@@ -42,9 +43,9 @@ public class Planet extends Entity{
 		}
 	}
 	
-	public void nextRotateAngle(double speed) {
+	public void nextRotateAngle(float speed) {
 		
-		angle += 0.002 * speed;
+		angle += 4 / speed;
 		if (angle >= 6.3)
 			angle -= 6.3;
 	}
@@ -84,10 +85,18 @@ public class Planet extends Entity{
 	
 	public void createCircle(float radius, Color color) {
 		
-		this.circle = new Circle((int)this.x, (int)this.y, (int)radius, color);	
+		if (!circleCreated) {
+			this.circle = new Circle((int)this.x, (int)this.y, (int)radius, color);
+			circleCreated = true;
+		}
+		
 	}
 	
 	public void render(Graphics g) {
+		
+		if (circleCreated) {
+			this.circle.render(g);
+		}
 		
 		g.drawImage(animation[aniY][aniX], (int) neutralX, (int) neutralY, (int) scale, (int) scale, null);
 	}
