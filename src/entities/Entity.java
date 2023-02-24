@@ -6,11 +6,11 @@ public abstract class Entity {
 
 	
 	protected BufferedImage img;
-	protected int size, tilesY, tilesX, aniSpeed;
-	protected float x, y, neutralX, neutralY, scale;
+	protected int size, tilesY, tilesX;
+	protected float x, y, neutralX, neutralY, scale, aniSpeed;
 
 	
-	public Entity(BufferedImage img, int tilesX, int tilesY, int size, int aniSpeed, float x, float y, float scale) {
+	public Entity(BufferedImage img, int tilesX, int tilesY, int size, float aniSpeed, float x, float y, float scale) {
 		this.size = size;
 		this.scale = scale * size;
 		this.tilesX = tilesX;
@@ -18,7 +18,7 @@ public abstract class Entity {
 		this.x = x;
 		this.y = y;
 		this.img = img;
-		this.aniSpeed = aniSpeed;
+		this.aniSpeed = aniSpeed * (tilesX * tilesY);//frames;
 		
 		neutralizePos();
 	}
